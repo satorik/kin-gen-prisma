@@ -1,17 +1,11 @@
-import { extractFragmentReplacements } from 'prisma-binding'
-
-import Query from './Query'
-import Mutation from './Mutation'
-import User from './User'
-import Subscription from './Subscription'
+import Query from './query'
+import Mutation from './mutation'
 
 const resolvers = {
-  Query,
-  Mutation,
-  User
-  //, Subscription
+  Query: Query,
+  Mutation: Mutation
 }
 
-const fragmentReplacements = extractFragmentReplacements(resolvers)
+//console.log(resolvers)
 
-export {resolvers, fragmentReplacements}
+export { resolvers as default }

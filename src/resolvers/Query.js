@@ -1,7 +1,8 @@
-import getUserId from '../utils/getUserId'
+//import getUserId from '../utils/getUserId'
 
 const Query = {
   users(parent, {query, first, skip, after, orderBy}, {prisma}, info) {
+
     const opArgs = {
       first,
       skip,
@@ -18,11 +19,11 @@ const Query = {
       }
     }
 
-    return prisma.query.users(opArgs, info)
+    return prisma.users(opArgs, info)
   },
 
   me(parent, args, {prisma, req}, info) {
-    const id = getUserId(req)
+    //const id = getUserId(req)
 
     return prisma.query.user({where:{id}})
   }

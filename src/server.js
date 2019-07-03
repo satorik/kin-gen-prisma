@@ -1,20 +1,12 @@
-import { GraphQLServer, PubSub } from 'graphql-yoga'
-import {resolvers, fragmentReplacements } from './resolvers'
-import prisma from './prisma'
+import {  ApolloServer } from 'apollo-server'
+import { schema } from './schema'
+import { prisma } from './generated/'
 
-const pubsub = new PubSub()
-
-const server = new GraphQLServer({
-  typeDefs:'./src/schema.graphql',
-  resolvers,
-  context(req) {
-    return  {
-      pubsub,
-      prisma,
-      req
-    }
-  },
-  fragmentReplacements
+const server = new ApolloServer({ 
+  schema,
+  context: {
+    prisma
+  }
 })
 
 export {server as default}
