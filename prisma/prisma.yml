@@ -1,5 +1,6 @@
-endpoint: https://kin-gen-dev-81eaa6c664.herokuapp.com/kin-gen/dev
+endpoint: ${env:PRISMA_ENDPOINT}
 datamodel: datamodel.prisma
+secret: ${env:PRISMA_SECRET}
 
 generate:
   - generator: javascript-client
