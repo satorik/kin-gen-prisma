@@ -3,7 +3,15 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregateMarriage {
+  count: Int!
+}
+
+type AggregatePerson {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -11,9 +19,278 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 scalar Long
 
+type Marriage {
+  id: ID!
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  person: Person
+  marriedTo: Person
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+type MarriageConnection {
+  pageInfo: PageInfo!
+  edges: [MarriageEdge]!
+  aggregate: AggregateMarriage!
+}
+
+input MarriageCreateInput {
+  id: ID
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  person: PersonCreateOneWithoutMarriageInput
+  marriedTo: PersonCreateOneInput
+}
+
+input MarriageCreateManyWithoutPersonInput {
+  create: [MarriageCreateWithoutPersonInput!]
+  connect: [MarriageWhereUniqueInput!]
+}
+
+input MarriageCreateWithoutPersonInput {
+  id: ID
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  marriedTo: PersonCreateOneInput
+}
+
+type MarriageEdge {
+  node: Marriage!
+  cursor: String!
+}
+
+enum MarriageOrderByInput {
+  id_ASC
+  id_DESC
+  isOfficial_ASC
+  isOfficial_DESC
+  marriedAt_ASC
+  marriedAt_DESC
+  divorcedAt_ASC
+  divorcedAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type MarriagePreviousValues {
+  id: ID!
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+input MarriageScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  isOfficial: Boolean
+  isOfficial_not: Boolean
+  marriedAt: DateTime
+  marriedAt_not: DateTime
+  marriedAt_in: [DateTime!]
+  marriedAt_not_in: [DateTime!]
+  marriedAt_lt: DateTime
+  marriedAt_lte: DateTime
+  marriedAt_gt: DateTime
+  marriedAt_gte: DateTime
+  divorcedAt: DateTime
+  divorcedAt_not: DateTime
+  divorcedAt_in: [DateTime!]
+  divorcedAt_not_in: [DateTime!]
+  divorcedAt_lt: DateTime
+  divorcedAt_lte: DateTime
+  divorcedAt_gt: DateTime
+  divorcedAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MarriageScalarWhereInput!]
+  OR: [MarriageScalarWhereInput!]
+  NOT: [MarriageScalarWhereInput!]
+}
+
+type MarriageSubscriptionPayload {
+  mutation: MutationType!
+  node: Marriage
+  updatedFields: [String!]
+  previousValues: MarriagePreviousValues
+}
+
+input MarriageSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MarriageWhereInput
+  AND: [MarriageSubscriptionWhereInput!]
+  OR: [MarriageSubscriptionWhereInput!]
+  NOT: [MarriageSubscriptionWhereInput!]
+}
+
+input MarriageUpdateInput {
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  person: PersonUpdateOneWithoutMarriageInput
+  marriedTo: PersonUpdateOneInput
+}
+
+input MarriageUpdateManyDataInput {
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+}
+
+input MarriageUpdateManyMutationInput {
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+}
+
+input MarriageUpdateManyWithoutPersonInput {
+  create: [MarriageCreateWithoutPersonInput!]
+  delete: [MarriageWhereUniqueInput!]
+  connect: [MarriageWhereUniqueInput!]
+  set: [MarriageWhereUniqueInput!]
+  disconnect: [MarriageWhereUniqueInput!]
+  update: [MarriageUpdateWithWhereUniqueWithoutPersonInput!]
+  upsert: [MarriageUpsertWithWhereUniqueWithoutPersonInput!]
+  deleteMany: [MarriageScalarWhereInput!]
+  updateMany: [MarriageUpdateManyWithWhereNestedInput!]
+}
+
+input MarriageUpdateManyWithWhereNestedInput {
+  where: MarriageScalarWhereInput!
+  data: MarriageUpdateManyDataInput!
+}
+
+input MarriageUpdateWithoutPersonDataInput {
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  marriedTo: PersonUpdateOneInput
+}
+
+input MarriageUpdateWithWhereUniqueWithoutPersonInput {
+  where: MarriageWhereUniqueInput!
+  data: MarriageUpdateWithoutPersonDataInput!
+}
+
+input MarriageUpsertWithWhereUniqueWithoutPersonInput {
+  where: MarriageWhereUniqueInput!
+  update: MarriageUpdateWithoutPersonDataInput!
+  create: MarriageCreateWithoutPersonInput!
+}
+
+input MarriageWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  isOfficial: Boolean
+  isOfficial_not: Boolean
+  marriedAt: DateTime
+  marriedAt_not: DateTime
+  marriedAt_in: [DateTime!]
+  marriedAt_not_in: [DateTime!]
+  marriedAt_lt: DateTime
+  marriedAt_lte: DateTime
+  marriedAt_gt: DateTime
+  marriedAt_gte: DateTime
+  divorcedAt: DateTime
+  divorcedAt_not: DateTime
+  divorcedAt_in: [DateTime!]
+  divorcedAt_not_in: [DateTime!]
+  divorcedAt_lt: DateTime
+  divorcedAt_lte: DateTime
+  divorcedAt_gt: DateTime
+  divorcedAt_gte: DateTime
+  person: PersonWhereInput
+  marriedTo: PersonWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [MarriageWhereInput!]
+  OR: [MarriageWhereInput!]
+  NOT: [MarriageWhereInput!]
+}
+
+input MarriageWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
+  createMarriage(data: MarriageCreateInput!): Marriage!
+  updateMarriage(data: MarriageUpdateInput!, where: MarriageWhereUniqueInput!): Marriage
+  updateManyMarriages(data: MarriageUpdateManyMutationInput!, where: MarriageWhereInput): BatchPayload!
+  upsertMarriage(where: MarriageWhereUniqueInput!, create: MarriageCreateInput!, update: MarriageUpdateInput!): Marriage!
+  deleteMarriage(where: MarriageWhereUniqueInput!): Marriage
+  deleteManyMarriages(where: MarriageWhereInput): BatchPayload!
+  createPerson(data: PersonCreateInput!): Person!
+  updatePerson(data: PersonUpdateInput!, where: PersonWhereUniqueInput!): Person
+  updateManyPersons(data: PersonUpdateManyMutationInput!, where: PersonWhereInput): BatchPayload!
+  upsertPerson(where: PersonWhereUniqueInput!, create: PersonCreateInput!, update: PersonUpdateInput!): Person!
+  deletePerson(where: PersonWhereUniqueInput!): Person
+  deleteManyPersons(where: PersonWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -39,20 +316,603 @@ type PageInfo {
   endCursor: String
 }
 
+type Person {
+  id: ID!
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person!]
+  children(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person!]
+  marriage(where: MarriageWhereInput, orderBy: MarriageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Marriage!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  user: User
+}
+
+type PersonConnection {
+  pageInfo: PageInfo!
+  edges: [PersonEdge]!
+  aggregate: AggregatePerson!
+}
+
+input PersonCreateInput {
+  id: ID
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonCreateManyWithoutParentsInput
+  children: PersonCreateManyWithoutChildrenInput
+  marriage: MarriageCreateManyWithoutPersonInput
+  user: UserCreateOneWithoutPersonInput
+}
+
+input PersonCreateManyWithoutChildrenInput {
+  create: [PersonCreateWithoutChildrenInput!]
+  connect: [PersonWhereUniqueInput!]
+}
+
+input PersonCreateManyWithoutParentsInput {
+  create: [PersonCreateWithoutParentsInput!]
+  connect: [PersonWhereUniqueInput!]
+}
+
+input PersonCreateOneInput {
+  create: PersonCreateInput
+  connect: PersonWhereUniqueInput
+}
+
+input PersonCreateOneWithoutMarriageInput {
+  create: PersonCreateWithoutMarriageInput
+  connect: PersonWhereUniqueInput
+}
+
+input PersonCreateOneWithoutUserInput {
+  create: PersonCreateWithoutUserInput
+  connect: PersonWhereUniqueInput
+}
+
+input PersonCreateWithoutChildrenInput {
+  id: ID
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonCreateManyWithoutParentsInput
+  marriage: MarriageCreateManyWithoutPersonInput
+  user: UserCreateOneWithoutPersonInput
+}
+
+input PersonCreateWithoutMarriageInput {
+  id: ID
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonCreateManyWithoutParentsInput
+  children: PersonCreateManyWithoutChildrenInput
+  user: UserCreateOneWithoutPersonInput
+}
+
+input PersonCreateWithoutParentsInput {
+  id: ID
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  children: PersonCreateManyWithoutChildrenInput
+  marriage: MarriageCreateManyWithoutPersonInput
+  user: UserCreateOneWithoutPersonInput
+}
+
+input PersonCreateWithoutUserInput {
+  id: ID
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonCreateManyWithoutParentsInput
+  children: PersonCreateManyWithoutChildrenInput
+  marriage: MarriageCreateManyWithoutPersonInput
+}
+
+type PersonEdge {
+  node: Person!
+  cursor: String!
+}
+
+enum PersonOrderByInput {
+  id_ASC
+  id_DESC
+  firstname_ASC
+  firstname_DESC
+  middlename_ASC
+  middlename_DESC
+  lastname_ASC
+  lastname_DESC
+  birthday_ASC
+  birthday_DESC
+  deathday_ASC
+  deathday_DESC
+  sex_ASC
+  sex_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type PersonPreviousValues {
+  id: ID!
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  updatedAt: DateTime!
+  createdAt: DateTime!
+}
+
+input PersonScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  firstname: String
+  firstname_not: String
+  firstname_in: [String!]
+  firstname_not_in: [String!]
+  firstname_lt: String
+  firstname_lte: String
+  firstname_gt: String
+  firstname_gte: String
+  firstname_contains: String
+  firstname_not_contains: String
+  firstname_starts_with: String
+  firstname_not_starts_with: String
+  firstname_ends_with: String
+  firstname_not_ends_with: String
+  middlename: String
+  middlename_not: String
+  middlename_in: [String!]
+  middlename_not_in: [String!]
+  middlename_lt: String
+  middlename_lte: String
+  middlename_gt: String
+  middlename_gte: String
+  middlename_contains: String
+  middlename_not_contains: String
+  middlename_starts_with: String
+  middlename_not_starts_with: String
+  middlename_ends_with: String
+  middlename_not_ends_with: String
+  lastname: String
+  lastname_not: String
+  lastname_in: [String!]
+  lastname_not_in: [String!]
+  lastname_lt: String
+  lastname_lte: String
+  lastname_gt: String
+  lastname_gte: String
+  lastname_contains: String
+  lastname_not_contains: String
+  lastname_starts_with: String
+  lastname_not_starts_with: String
+  lastname_ends_with: String
+  lastname_not_ends_with: String
+  birthday: DateTime
+  birthday_not: DateTime
+  birthday_in: [DateTime!]
+  birthday_not_in: [DateTime!]
+  birthday_lt: DateTime
+  birthday_lte: DateTime
+  birthday_gt: DateTime
+  birthday_gte: DateTime
+  deathday: DateTime
+  deathday_not: DateTime
+  deathday_in: [DateTime!]
+  deathday_not_in: [DateTime!]
+  deathday_lt: DateTime
+  deathday_lte: DateTime
+  deathday_gt: DateTime
+  deathday_gte: DateTime
+  sex: Sex
+  sex_not: Sex
+  sex_in: [Sex!]
+  sex_not_in: [Sex!]
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [PersonScalarWhereInput!]
+  OR: [PersonScalarWhereInput!]
+  NOT: [PersonScalarWhereInput!]
+}
+
+type PersonSubscriptionPayload {
+  mutation: MutationType!
+  node: Person
+  updatedFields: [String!]
+  previousValues: PersonPreviousValues
+}
+
+input PersonSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PersonWhereInput
+  AND: [PersonSubscriptionWhereInput!]
+  OR: [PersonSubscriptionWhereInput!]
+  NOT: [PersonSubscriptionWhereInput!]
+}
+
+input PersonUpdateDataInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonUpdateManyWithoutParentsInput
+  children: PersonUpdateManyWithoutChildrenInput
+  marriage: MarriageUpdateManyWithoutPersonInput
+  user: UserUpdateOneWithoutPersonInput
+}
+
+input PersonUpdateInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonUpdateManyWithoutParentsInput
+  children: PersonUpdateManyWithoutChildrenInput
+  marriage: MarriageUpdateManyWithoutPersonInput
+  user: UserUpdateOneWithoutPersonInput
+}
+
+input PersonUpdateManyDataInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+}
+
+input PersonUpdateManyMutationInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+}
+
+input PersonUpdateManyWithoutChildrenInput {
+  create: [PersonCreateWithoutChildrenInput!]
+  delete: [PersonWhereUniqueInput!]
+  connect: [PersonWhereUniqueInput!]
+  set: [PersonWhereUniqueInput!]
+  disconnect: [PersonWhereUniqueInput!]
+  update: [PersonUpdateWithWhereUniqueWithoutChildrenInput!]
+  upsert: [PersonUpsertWithWhereUniqueWithoutChildrenInput!]
+  deleteMany: [PersonScalarWhereInput!]
+  updateMany: [PersonUpdateManyWithWhereNestedInput!]
+}
+
+input PersonUpdateManyWithoutParentsInput {
+  create: [PersonCreateWithoutParentsInput!]
+  delete: [PersonWhereUniqueInput!]
+  connect: [PersonWhereUniqueInput!]
+  set: [PersonWhereUniqueInput!]
+  disconnect: [PersonWhereUniqueInput!]
+  update: [PersonUpdateWithWhereUniqueWithoutParentsInput!]
+  upsert: [PersonUpsertWithWhereUniqueWithoutParentsInput!]
+  deleteMany: [PersonScalarWhereInput!]
+  updateMany: [PersonUpdateManyWithWhereNestedInput!]
+}
+
+input PersonUpdateManyWithWhereNestedInput {
+  where: PersonScalarWhereInput!
+  data: PersonUpdateManyDataInput!
+}
+
+input PersonUpdateOneInput {
+  create: PersonCreateInput
+  update: PersonUpdateDataInput
+  upsert: PersonUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PersonWhereUniqueInput
+}
+
+input PersonUpdateOneWithoutMarriageInput {
+  create: PersonCreateWithoutMarriageInput
+  update: PersonUpdateWithoutMarriageDataInput
+  upsert: PersonUpsertWithoutMarriageInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PersonWhereUniqueInput
+}
+
+input PersonUpdateOneWithoutUserInput {
+  create: PersonCreateWithoutUserInput
+  update: PersonUpdateWithoutUserDataInput
+  upsert: PersonUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PersonWhereUniqueInput
+}
+
+input PersonUpdateWithoutChildrenDataInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonUpdateManyWithoutParentsInput
+  marriage: MarriageUpdateManyWithoutPersonInput
+  user: UserUpdateOneWithoutPersonInput
+}
+
+input PersonUpdateWithoutMarriageDataInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonUpdateManyWithoutParentsInput
+  children: PersonUpdateManyWithoutChildrenInput
+  user: UserUpdateOneWithoutPersonInput
+}
+
+input PersonUpdateWithoutParentsDataInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  children: PersonUpdateManyWithoutChildrenInput
+  marriage: MarriageUpdateManyWithoutPersonInput
+  user: UserUpdateOneWithoutPersonInput
+}
+
+input PersonUpdateWithoutUserDataInput {
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: PersonUpdateManyWithoutParentsInput
+  children: PersonUpdateManyWithoutChildrenInput
+  marriage: MarriageUpdateManyWithoutPersonInput
+}
+
+input PersonUpdateWithWhereUniqueWithoutChildrenInput {
+  where: PersonWhereUniqueInput!
+  data: PersonUpdateWithoutChildrenDataInput!
+}
+
+input PersonUpdateWithWhereUniqueWithoutParentsInput {
+  where: PersonWhereUniqueInput!
+  data: PersonUpdateWithoutParentsDataInput!
+}
+
+input PersonUpsertNestedInput {
+  update: PersonUpdateDataInput!
+  create: PersonCreateInput!
+}
+
+input PersonUpsertWithoutMarriageInput {
+  update: PersonUpdateWithoutMarriageDataInput!
+  create: PersonCreateWithoutMarriageInput!
+}
+
+input PersonUpsertWithoutUserInput {
+  update: PersonUpdateWithoutUserDataInput!
+  create: PersonCreateWithoutUserInput!
+}
+
+input PersonUpsertWithWhereUniqueWithoutChildrenInput {
+  where: PersonWhereUniqueInput!
+  update: PersonUpdateWithoutChildrenDataInput!
+  create: PersonCreateWithoutChildrenInput!
+}
+
+input PersonUpsertWithWhereUniqueWithoutParentsInput {
+  where: PersonWhereUniqueInput!
+  update: PersonUpdateWithoutParentsDataInput!
+  create: PersonCreateWithoutParentsInput!
+}
+
+input PersonWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  firstname: String
+  firstname_not: String
+  firstname_in: [String!]
+  firstname_not_in: [String!]
+  firstname_lt: String
+  firstname_lte: String
+  firstname_gt: String
+  firstname_gte: String
+  firstname_contains: String
+  firstname_not_contains: String
+  firstname_starts_with: String
+  firstname_not_starts_with: String
+  firstname_ends_with: String
+  firstname_not_ends_with: String
+  middlename: String
+  middlename_not: String
+  middlename_in: [String!]
+  middlename_not_in: [String!]
+  middlename_lt: String
+  middlename_lte: String
+  middlename_gt: String
+  middlename_gte: String
+  middlename_contains: String
+  middlename_not_contains: String
+  middlename_starts_with: String
+  middlename_not_starts_with: String
+  middlename_ends_with: String
+  middlename_not_ends_with: String
+  lastname: String
+  lastname_not: String
+  lastname_in: [String!]
+  lastname_not_in: [String!]
+  lastname_lt: String
+  lastname_lte: String
+  lastname_gt: String
+  lastname_gte: String
+  lastname_contains: String
+  lastname_not_contains: String
+  lastname_starts_with: String
+  lastname_not_starts_with: String
+  lastname_ends_with: String
+  lastname_not_ends_with: String
+  birthday: DateTime
+  birthday_not: DateTime
+  birthday_in: [DateTime!]
+  birthday_not_in: [DateTime!]
+  birthday_lt: DateTime
+  birthday_lte: DateTime
+  birthday_gt: DateTime
+  birthday_gte: DateTime
+  deathday: DateTime
+  deathday_not: DateTime
+  deathday_in: [DateTime!]
+  deathday_not_in: [DateTime!]
+  deathday_lt: DateTime
+  deathday_lte: DateTime
+  deathday_gt: DateTime
+  deathday_gte: DateTime
+  sex: Sex
+  sex_not: Sex
+  sex_in: [Sex!]
+  sex_not_in: [Sex!]
+  parents_every: PersonWhereInput
+  parents_some: PersonWhereInput
+  parents_none: PersonWhereInput
+  children_every: PersonWhereInput
+  children_some: PersonWhereInput
+  children_none: PersonWhereInput
+  marriage_every: MarriageWhereInput
+  marriage_some: MarriageWhereInput
+  marriage_none: MarriageWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  user: UserWhereInput
+  AND: [PersonWhereInput!]
+  OR: [PersonWhereInput!]
+  NOT: [PersonWhereInput!]
+}
+
+input PersonWhereUniqueInput {
+  id: ID
+}
+
 type Query {
+  marriage(where: MarriageWhereUniqueInput!): Marriage
+  marriages(where: MarriageWhereInput, orderBy: MarriageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Marriage]!
+  marriagesConnection(where: MarriageWhereInput, orderBy: MarriageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MarriageConnection!
+  person(where: PersonWhereUniqueInput!): Person
+  persons(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Person]!
+  personsConnection(where: PersonWhereInput, orderBy: PersonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PersonConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
+}
+
 type Subscription {
+  marriage(where: MarriageSubscriptionWhereInput): MarriageSubscriptionPayload
+  person(where: PersonSubscriptionWhereInput): PersonSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User {
   id: ID!
   name: String!
+  email: String!
+  password: String!
+  person: Person
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type UserConnection {
@@ -64,6 +924,21 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   name: String!
+  email: String!
+  password: String!
+  person: PersonCreateOneWithoutUserInput
+}
+
+input UserCreateOneWithoutPersonInput {
+  create: UserCreateWithoutPersonInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutPersonInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
 }
 
 type UserEdge {
@@ -76,11 +951,23 @@ enum UserOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   name: String!
+  email: String!
+  password: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -103,10 +990,35 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   name: String
+  email: String
+  password: String
+  person: PersonUpdateOneWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
+  email: String
+  password: String
+}
+
+input UserUpdateOneWithoutPersonInput {
+  create: UserCreateWithoutPersonInput
+  update: UserUpdateWithoutPersonDataInput
+  upsert: UserUpsertWithoutPersonInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutPersonDataInput {
+  name: String
+  email: String
+  password: String
+}
+
+input UserUpsertWithoutPersonInput {
+  update: UserUpdateWithoutPersonDataInput!
+  create: UserCreateWithoutPersonInput!
 }
 
 input UserWhereInput {
@@ -138,6 +1050,51 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  person: PersonWhereInput
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -145,6 +1102,7 @@ input UserWhereInput {
 
 input UserWhereUniqueInput {
   id: ID
+  email: String
 }
 `
       }

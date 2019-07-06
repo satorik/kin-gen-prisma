@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env-cmd -f config/dev.env nodemon --ignore frontend/ src/index.js --exec babel-node"
+    "start": "env-cmd -f config/dev.env nodemon --ignore frontend/ src/index.js --exec babel-node",
+    "deploy": "prisma deploy -e config/dev.env",
+    "generate": "prisma generate -e config/dev.env"
   },
   "repository": {
     "type": "git",

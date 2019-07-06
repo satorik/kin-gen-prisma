@@ -16,6 +16,8 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  marriage: (where?: MarriageWhereInput) => Promise<boolean>;
+  person: (where?: PersonWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -38,6 +40,44 @@ export interface Prisma {
    * Queries
    */
 
+  marriage: (where: MarriageWhereUniqueInput) => MarriageNullablePromise;
+  marriages: (args?: {
+    where?: MarriageWhereInput;
+    orderBy?: MarriageOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Marriage>;
+  marriagesConnection: (args?: {
+    where?: MarriageWhereInput;
+    orderBy?: MarriageOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => MarriageConnectionPromise;
+  person: (where: PersonWhereUniqueInput) => PersonNullablePromise;
+  persons: (args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Person>;
+  personsConnection: (args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => PersonConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -63,6 +103,38 @@ export interface Prisma {
    * Mutations
    */
 
+  createMarriage: (data: MarriageCreateInput) => MarriagePromise;
+  updateMarriage: (args: {
+    data: MarriageUpdateInput;
+    where: MarriageWhereUniqueInput;
+  }) => MarriagePromise;
+  updateManyMarriages: (args: {
+    data: MarriageUpdateManyMutationInput;
+    where?: MarriageWhereInput;
+  }) => BatchPayloadPromise;
+  upsertMarriage: (args: {
+    where: MarriageWhereUniqueInput;
+    create: MarriageCreateInput;
+    update: MarriageUpdateInput;
+  }) => MarriagePromise;
+  deleteMarriage: (where: MarriageWhereUniqueInput) => MarriagePromise;
+  deleteManyMarriages: (where?: MarriageWhereInput) => BatchPayloadPromise;
+  createPerson: (data: PersonCreateInput) => PersonPromise;
+  updatePerson: (args: {
+    data: PersonUpdateInput;
+    where: PersonWhereUniqueInput;
+  }) => PersonPromise;
+  updateManyPersons: (args: {
+    data: PersonUpdateManyMutationInput;
+    where?: PersonWhereInput;
+  }) => BatchPayloadPromise;
+  upsertPerson: (args: {
+    where: PersonWhereUniqueInput;
+    create: PersonCreateInput;
+    update: PersonUpdateInput;
+  }) => PersonPromise;
+  deletePerson: (where: PersonWhereUniqueInput) => PersonPromise;
+  deleteManyPersons: (where?: PersonWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -88,6 +160,12 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  marriage: (
+    where?: MarriageSubscriptionWhereInput
+  ) => MarriageSubscriptionPayloadSubscription;
+  person: (
+    where?: PersonSubscriptionWhereInput
+  ) => PersonSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -101,21 +179,110 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type UserOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
+export type Sex = "MALE" | "FEMALE" | "OTHER";
+
+export type PersonOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "firstname_ASC"
+  | "firstname_DESC"
+  | "middlename_ASC"
+  | "middlename_DESC"
+  | "lastname_ASC"
+  | "lastname_DESC"
+  | "birthday_ASC"
+  | "birthday_DESC"
+  | "deathday_ASC"
+  | "deathday_DESC"
+  | "sex_ASC"
+  | "sex_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
+
+export type MarriageOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "isOfficial_ASC"
+  | "isOfficial_DESC"
+  | "marriedAt_ASC"
+  | "marriedAt_DESC"
+  | "divorcedAt_ASC"
+  | "divorcedAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserCreateInput {
+export interface PersonUpdateWithWhereUniqueWithoutParentsInput {
+  where: PersonWhereUniqueInput;
+  data: PersonUpdateWithoutParentsDataInput;
+}
+
+export type MarriageWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface PersonCreateOneInput {
+  create?: Maybe<PersonCreateInput>;
+  connect?: Maybe<PersonWhereUniqueInput>;
+}
+
+export interface PersonUpdateManyDataInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+}
+
+export interface PersonCreateInput {
   id?: Maybe<ID_Input>;
-  name: String;
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonCreateManyWithoutParentsInput>;
+  children?: Maybe<PersonCreateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageCreateManyWithoutPersonInput>;
+  user?: Maybe<UserCreateOneWithoutPersonInput>;
 }
 
-export interface UserUpdateInput {
-  name?: Maybe<String>;
+export interface PersonUpdateWithoutChildrenDataInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonUpdateManyWithoutParentsInput>;
+  marriage?: Maybe<MarriageUpdateManyWithoutPersonInput>;
+  user?: Maybe<UserUpdateOneWithoutPersonInput>;
 }
 
-export interface UserUpdateManyMutationInput {
-  name?: Maybe<String>;
+export interface UserCreateOneWithoutPersonInput {
+  create?: Maybe<UserCreateWithoutPersonInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
 export interface UserWhereInput {
@@ -147,10 +314,775 @@ export interface UserWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  person?: Maybe<PersonWhereInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
+
+export interface UserCreateWithoutPersonInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  email: String;
+  password: String;
+}
+
+export interface PersonSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<PersonWhereInput>;
+  AND?: Maybe<PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput>;
+  OR?: Maybe<PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput>;
+  NOT?: Maybe<PersonSubscriptionWhereInput[] | PersonSubscriptionWhereInput>;
+}
+
+export interface MarriageUpdateInput {
+  isOfficial?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+  person?: Maybe<PersonUpdateOneWithoutMarriageInput>;
+  marriedTo?: Maybe<PersonUpdateOneInput>;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+}
+
+export interface PersonUpdateOneWithoutMarriageInput {
+  create?: Maybe<PersonCreateWithoutMarriageInput>;
+  update?: Maybe<PersonUpdateWithoutMarriageDataInput>;
+  upsert?: Maybe<PersonUpsertWithoutMarriageInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<PersonWhereUniqueInput>;
+}
+
+export interface PersonUpdateWithoutUserDataInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonUpdateManyWithoutParentsInput>;
+  children?: Maybe<PersonUpdateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageUpdateManyWithoutPersonInput>;
+}
+
+export interface PersonUpdateWithoutMarriageDataInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonUpdateManyWithoutParentsInput>;
+  children?: Maybe<PersonUpdateManyWithoutChildrenInput>;
+  user?: Maybe<UserUpdateOneWithoutPersonInput>;
+}
+
+export interface UserUpdateInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  person?: Maybe<PersonUpdateOneWithoutUserInput>;
+}
+
+export interface PersonUpdateManyWithoutParentsInput {
+  create?: Maybe<
+    PersonCreateWithoutParentsInput[] | PersonCreateWithoutParentsInput
+  >;
+  delete?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  connect?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  set?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  disconnect?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  update?: Maybe<
+    | PersonUpdateWithWhereUniqueWithoutParentsInput[]
+    | PersonUpdateWithWhereUniqueWithoutParentsInput
+  >;
+  upsert?: Maybe<
+    | PersonUpsertWithWhereUniqueWithoutParentsInput[]
+    | PersonUpsertWithWhereUniqueWithoutParentsInput
+  >;
+  deleteMany?: Maybe<PersonScalarWhereInput[] | PersonScalarWhereInput>;
+  updateMany?: Maybe<
+    | PersonUpdateManyWithWhereNestedInput[]
+    | PersonUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PersonCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonCreateManyWithoutParentsInput>;
+  children?: Maybe<PersonCreateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageCreateManyWithoutPersonInput>;
+}
+
+export interface PersonUpsertWithWhereUniqueWithoutParentsInput {
+  where: PersonWhereUniqueInput;
+  update: PersonUpdateWithoutParentsDataInput;
+  create: PersonCreateWithoutParentsInput;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  email: String;
+  password: String;
+  person?: Maybe<PersonCreateOneWithoutUserInput>;
+}
+
+export interface PersonUpdateWithoutParentsDataInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  children?: Maybe<PersonUpdateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageUpdateManyWithoutPersonInput>;
+  user?: Maybe<UserUpdateOneWithoutPersonInput>;
+}
+
+export interface PersonUpdateManyMutationInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+}
+
+export interface PersonUpdateManyWithoutChildrenInput {
+  create?: Maybe<
+    PersonCreateWithoutChildrenInput[] | PersonCreateWithoutChildrenInput
+  >;
+  delete?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  connect?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  set?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  disconnect?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+  update?: Maybe<
+    | PersonUpdateWithWhereUniqueWithoutChildrenInput[]
+    | PersonUpdateWithWhereUniqueWithoutChildrenInput
+  >;
+  upsert?: Maybe<
+    | PersonUpsertWithWhereUniqueWithoutChildrenInput[]
+    | PersonUpsertWithWhereUniqueWithoutChildrenInput
+  >;
+  deleteMany?: Maybe<PersonScalarWhereInput[] | PersonScalarWhereInput>;
+  updateMany?: Maybe<
+    | PersonUpdateManyWithWhereNestedInput[]
+    | PersonUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface MarriageUpdateManyMutationInput {
+  isOfficial?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+}
+
+export interface PersonUpdateWithWhereUniqueWithoutChildrenInput {
+  where: PersonWhereUniqueInput;
+  data: PersonUpdateWithoutChildrenDataInput;
+}
+
+export interface PersonCreateOneWithoutMarriageInput {
+  create?: Maybe<PersonCreateWithoutMarriageInput>;
+  connect?: Maybe<PersonWhereUniqueInput>;
+}
+
+export interface PersonWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  firstname?: Maybe<String>;
+  firstname_not?: Maybe<String>;
+  firstname_in?: Maybe<String[] | String>;
+  firstname_not_in?: Maybe<String[] | String>;
+  firstname_lt?: Maybe<String>;
+  firstname_lte?: Maybe<String>;
+  firstname_gt?: Maybe<String>;
+  firstname_gte?: Maybe<String>;
+  firstname_contains?: Maybe<String>;
+  firstname_not_contains?: Maybe<String>;
+  firstname_starts_with?: Maybe<String>;
+  firstname_not_starts_with?: Maybe<String>;
+  firstname_ends_with?: Maybe<String>;
+  firstname_not_ends_with?: Maybe<String>;
+  middlename?: Maybe<String>;
+  middlename_not?: Maybe<String>;
+  middlename_in?: Maybe<String[] | String>;
+  middlename_not_in?: Maybe<String[] | String>;
+  middlename_lt?: Maybe<String>;
+  middlename_lte?: Maybe<String>;
+  middlename_gt?: Maybe<String>;
+  middlename_gte?: Maybe<String>;
+  middlename_contains?: Maybe<String>;
+  middlename_not_contains?: Maybe<String>;
+  middlename_starts_with?: Maybe<String>;
+  middlename_not_starts_with?: Maybe<String>;
+  middlename_ends_with?: Maybe<String>;
+  middlename_not_ends_with?: Maybe<String>;
+  lastname?: Maybe<String>;
+  lastname_not?: Maybe<String>;
+  lastname_in?: Maybe<String[] | String>;
+  lastname_not_in?: Maybe<String[] | String>;
+  lastname_lt?: Maybe<String>;
+  lastname_lte?: Maybe<String>;
+  lastname_gt?: Maybe<String>;
+  lastname_gte?: Maybe<String>;
+  lastname_contains?: Maybe<String>;
+  lastname_not_contains?: Maybe<String>;
+  lastname_starts_with?: Maybe<String>;
+  lastname_not_starts_with?: Maybe<String>;
+  lastname_ends_with?: Maybe<String>;
+  lastname_not_ends_with?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  birthday_not?: Maybe<DateTimeInput>;
+  birthday_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  birthday_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  birthday_lt?: Maybe<DateTimeInput>;
+  birthday_lte?: Maybe<DateTimeInput>;
+  birthday_gt?: Maybe<DateTimeInput>;
+  birthday_gte?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  deathday_not?: Maybe<DateTimeInput>;
+  deathday_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  deathday_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  deathday_lt?: Maybe<DateTimeInput>;
+  deathday_lte?: Maybe<DateTimeInput>;
+  deathday_gt?: Maybe<DateTimeInput>;
+  deathday_gte?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  sex_not?: Maybe<Sex>;
+  sex_in?: Maybe<Sex[] | Sex>;
+  sex_not_in?: Maybe<Sex[] | Sex>;
+  parents_every?: Maybe<PersonWhereInput>;
+  parents_some?: Maybe<PersonWhereInput>;
+  parents_none?: Maybe<PersonWhereInput>;
+  children_every?: Maybe<PersonWhereInput>;
+  children_some?: Maybe<PersonWhereInput>;
+  children_none?: Maybe<PersonWhereInput>;
+  marriage_every?: Maybe<MarriageWhereInput>;
+  marriage_some?: Maybe<MarriageWhereInput>;
+  marriage_none?: Maybe<MarriageWhereInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  user?: Maybe<UserWhereInput>;
+  AND?: Maybe<PersonWhereInput[] | PersonWhereInput>;
+  OR?: Maybe<PersonWhereInput[] | PersonWhereInput>;
+  NOT?: Maybe<PersonWhereInput[] | PersonWhereInput>;
+}
+
+export interface PersonCreateManyWithoutParentsInput {
+  create?: Maybe<
+    PersonCreateWithoutParentsInput[] | PersonCreateWithoutParentsInput
+  >;
+  connect?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+}
+
+export interface MarriageUpdateManyWithoutPersonInput {
+  create?: Maybe<
+    MarriageCreateWithoutPersonInput[] | MarriageCreateWithoutPersonInput
+  >;
+  delete?: Maybe<MarriageWhereUniqueInput[] | MarriageWhereUniqueInput>;
+  connect?: Maybe<MarriageWhereUniqueInput[] | MarriageWhereUniqueInput>;
+  set?: Maybe<MarriageWhereUniqueInput[] | MarriageWhereUniqueInput>;
+  disconnect?: Maybe<MarriageWhereUniqueInput[] | MarriageWhereUniqueInput>;
+  update?: Maybe<
+    | MarriageUpdateWithWhereUniqueWithoutPersonInput[]
+    | MarriageUpdateWithWhereUniqueWithoutPersonInput
+  >;
+  upsert?: Maybe<
+    | MarriageUpsertWithWhereUniqueWithoutPersonInput[]
+    | MarriageUpsertWithWhereUniqueWithoutPersonInput
+  >;
+  deleteMany?: Maybe<MarriageScalarWhereInput[] | MarriageScalarWhereInput>;
+  updateMany?: Maybe<
+    | MarriageUpdateManyWithWhereNestedInput[]
+    | MarriageUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PersonCreateManyWithoutChildrenInput {
+  create?: Maybe<
+    PersonCreateWithoutChildrenInput[] | PersonCreateWithoutChildrenInput
+  >;
+  connect?: Maybe<PersonWhereUniqueInput[] | PersonWhereUniqueInput>;
+}
+
+export interface MarriageUpdateWithWhereUniqueWithoutPersonInput {
+  where: MarriageWhereUniqueInput;
+  data: MarriageUpdateWithoutPersonDataInput;
+}
+
+export interface MarriageCreateManyWithoutPersonInput {
+  create?: Maybe<
+    MarriageCreateWithoutPersonInput[] | MarriageCreateWithoutPersonInput
+  >;
+  connect?: Maybe<MarriageWhereUniqueInput[] | MarriageWhereUniqueInput>;
+}
+
+export interface MarriageUpdateWithoutPersonDataInput {
+  isOfficial?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+  marriedTo?: Maybe<PersonUpdateOneInput>;
+}
+
+export interface MarriageWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  isOfficial?: Maybe<Boolean>;
+  isOfficial_not?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  marriedAt_not?: Maybe<DateTimeInput>;
+  marriedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  marriedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  marriedAt_lt?: Maybe<DateTimeInput>;
+  marriedAt_lte?: Maybe<DateTimeInput>;
+  marriedAt_gt?: Maybe<DateTimeInput>;
+  marriedAt_gte?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+  divorcedAt_not?: Maybe<DateTimeInput>;
+  divorcedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  divorcedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  divorcedAt_lt?: Maybe<DateTimeInput>;
+  divorcedAt_lte?: Maybe<DateTimeInput>;
+  divorcedAt_gt?: Maybe<DateTimeInput>;
+  divorcedAt_gte?: Maybe<DateTimeInput>;
+  person?: Maybe<PersonWhereInput>;
+  marriedTo?: Maybe<PersonWhereInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<MarriageWhereInput[] | MarriageWhereInput>;
+  OR?: Maybe<MarriageWhereInput[] | MarriageWhereInput>;
+  NOT?: Maybe<MarriageWhereInput[] | MarriageWhereInput>;
+}
+
+export interface PersonUpdateOneInput {
+  create?: Maybe<PersonCreateInput>;
+  update?: Maybe<PersonUpdateDataInput>;
+  upsert?: Maybe<PersonUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<PersonWhereUniqueInput>;
+}
+
+export interface MarriageSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<MarriageWhereInput>;
+  AND?: Maybe<
+    MarriageSubscriptionWhereInput[] | MarriageSubscriptionWhereInput
+  >;
+  OR?: Maybe<MarriageSubscriptionWhereInput[] | MarriageSubscriptionWhereInput>;
+  NOT?: Maybe<
+    MarriageSubscriptionWhereInput[] | MarriageSubscriptionWhereInput
+  >;
+}
+
+export interface PersonUpdateDataInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonUpdateManyWithoutParentsInput>;
+  children?: Maybe<PersonUpdateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageUpdateManyWithoutPersonInput>;
+  user?: Maybe<UserUpdateOneWithoutPersonInput>;
+}
+
+export interface PersonUpdateOneWithoutUserInput {
+  create?: Maybe<PersonCreateWithoutUserInput>;
+  update?: Maybe<PersonUpdateWithoutUserDataInput>;
+  upsert?: Maybe<PersonUpsertWithoutUserInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<PersonWhereUniqueInput>;
+}
+
+export interface UserUpdateOneWithoutPersonInput {
+  create?: Maybe<UserCreateWithoutPersonInput>;
+  update?: Maybe<UserUpdateWithoutPersonDataInput>;
+  upsert?: Maybe<UserUpsertWithoutPersonInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface PersonCreateOneWithoutUserInput {
+  create?: Maybe<PersonCreateWithoutUserInput>;
+  connect?: Maybe<PersonWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutPersonDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+}
+
+export interface PersonUpdateInput {
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonUpdateManyWithoutParentsInput>;
+  children?: Maybe<PersonUpdateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageUpdateManyWithoutPersonInput>;
+  user?: Maybe<UserUpdateOneWithoutPersonInput>;
+}
+
+export interface UserUpsertWithoutPersonInput {
+  update: UserUpdateWithoutPersonDataInput;
+  create: UserCreateWithoutPersonInput;
+}
+
+export interface MarriageCreateInput {
+  id?: Maybe<ID_Input>;
+  isOfficial?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+  person?: Maybe<PersonCreateOneWithoutMarriageInput>;
+  marriedTo?: Maybe<PersonCreateOneInput>;
+}
+
+export interface PersonUpsertNestedInput {
+  update: PersonUpdateDataInput;
+  create: PersonCreateInput;
+}
+
+export interface PersonCreateWithoutParentsInput {
+  id?: Maybe<ID_Input>;
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  children?: Maybe<PersonCreateManyWithoutChildrenInput>;
+  marriage?: Maybe<MarriageCreateManyWithoutPersonInput>;
+  user?: Maybe<UserCreateOneWithoutPersonInput>;
+}
+
+export interface MarriageUpsertWithWhereUniqueWithoutPersonInput {
+  where: MarriageWhereUniqueInput;
+  update: MarriageUpdateWithoutPersonDataInput;
+  create: MarriageCreateWithoutPersonInput;
+}
+
+export interface MarriageCreateWithoutPersonInput {
+  id?: Maybe<ID_Input>;
+  isOfficial?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+  marriedTo?: Maybe<PersonCreateOneInput>;
+}
+
+export interface MarriageScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  isOfficial?: Maybe<Boolean>;
+  isOfficial_not?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  marriedAt_not?: Maybe<DateTimeInput>;
+  marriedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  marriedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  marriedAt_lt?: Maybe<DateTimeInput>;
+  marriedAt_lte?: Maybe<DateTimeInput>;
+  marriedAt_gt?: Maybe<DateTimeInput>;
+  marriedAt_gte?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+  divorcedAt_not?: Maybe<DateTimeInput>;
+  divorcedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  divorcedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  divorcedAt_lt?: Maybe<DateTimeInput>;
+  divorcedAt_lte?: Maybe<DateTimeInput>;
+  divorcedAt_gt?: Maybe<DateTimeInput>;
+  divorcedAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<MarriageScalarWhereInput[] | MarriageScalarWhereInput>;
+  OR?: Maybe<MarriageScalarWhereInput[] | MarriageScalarWhereInput>;
+  NOT?: Maybe<MarriageScalarWhereInput[] | MarriageScalarWhereInput>;
+}
+
+export interface PersonUpsertWithoutUserInput {
+  update: PersonUpdateWithoutUserDataInput;
+  create: PersonCreateWithoutUserInput;
+}
+
+export interface MarriageUpdateManyWithWhereNestedInput {
+  where: MarriageScalarWhereInput;
+  data: MarriageUpdateManyDataInput;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
+
+export interface PersonUpdateManyWithWhereNestedInput {
+  where: PersonScalarWhereInput;
+  data: PersonUpdateManyDataInput;
+}
+
+export interface PersonScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  firstname?: Maybe<String>;
+  firstname_not?: Maybe<String>;
+  firstname_in?: Maybe<String[] | String>;
+  firstname_not_in?: Maybe<String[] | String>;
+  firstname_lt?: Maybe<String>;
+  firstname_lte?: Maybe<String>;
+  firstname_gt?: Maybe<String>;
+  firstname_gte?: Maybe<String>;
+  firstname_contains?: Maybe<String>;
+  firstname_not_contains?: Maybe<String>;
+  firstname_starts_with?: Maybe<String>;
+  firstname_not_starts_with?: Maybe<String>;
+  firstname_ends_with?: Maybe<String>;
+  firstname_not_ends_with?: Maybe<String>;
+  middlename?: Maybe<String>;
+  middlename_not?: Maybe<String>;
+  middlename_in?: Maybe<String[] | String>;
+  middlename_not_in?: Maybe<String[] | String>;
+  middlename_lt?: Maybe<String>;
+  middlename_lte?: Maybe<String>;
+  middlename_gt?: Maybe<String>;
+  middlename_gte?: Maybe<String>;
+  middlename_contains?: Maybe<String>;
+  middlename_not_contains?: Maybe<String>;
+  middlename_starts_with?: Maybe<String>;
+  middlename_not_starts_with?: Maybe<String>;
+  middlename_ends_with?: Maybe<String>;
+  middlename_not_ends_with?: Maybe<String>;
+  lastname?: Maybe<String>;
+  lastname_not?: Maybe<String>;
+  lastname_in?: Maybe<String[] | String>;
+  lastname_not_in?: Maybe<String[] | String>;
+  lastname_lt?: Maybe<String>;
+  lastname_lte?: Maybe<String>;
+  lastname_gt?: Maybe<String>;
+  lastname_gte?: Maybe<String>;
+  lastname_contains?: Maybe<String>;
+  lastname_not_contains?: Maybe<String>;
+  lastname_starts_with?: Maybe<String>;
+  lastname_not_starts_with?: Maybe<String>;
+  lastname_ends_with?: Maybe<String>;
+  lastname_not_ends_with?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  birthday_not?: Maybe<DateTimeInput>;
+  birthday_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  birthday_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  birthday_lt?: Maybe<DateTimeInput>;
+  birthday_lte?: Maybe<DateTimeInput>;
+  birthday_gt?: Maybe<DateTimeInput>;
+  birthday_gte?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  deathday_not?: Maybe<DateTimeInput>;
+  deathday_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  deathday_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  deathday_lt?: Maybe<DateTimeInput>;
+  deathday_lte?: Maybe<DateTimeInput>;
+  deathday_gt?: Maybe<DateTimeInput>;
+  deathday_gte?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  sex_not?: Maybe<Sex>;
+  sex_in?: Maybe<Sex[] | Sex>;
+  sex_not_in?: Maybe<Sex[] | Sex>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<PersonScalarWhereInput[] | PersonScalarWhereInput>;
+  OR?: Maybe<PersonScalarWhereInput[] | PersonScalarWhereInput>;
+  NOT?: Maybe<PersonScalarWhereInput[] | PersonScalarWhereInput>;
+}
+
+export interface PersonUpsertWithWhereUniqueWithoutChildrenInput {
+  where: PersonWhereUniqueInput;
+  update: PersonUpdateWithoutChildrenDataInput;
+  create: PersonCreateWithoutChildrenInput;
+}
+
+export interface MarriageUpdateManyDataInput {
+  isOfficial?: Maybe<Boolean>;
+  marriedAt?: Maybe<DateTimeInput>;
+  divorcedAt?: Maybe<DateTimeInput>;
+}
+
+export interface PersonUpsertWithoutMarriageInput {
+  update: PersonUpdateWithoutMarriageDataInput;
+  create: PersonCreateWithoutMarriageInput;
+}
+
+export type PersonWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export interface UserSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
@@ -163,12 +1095,148 @@ export interface UserSubscriptionWhereInput {
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
+export interface PersonCreateWithoutChildrenInput {
+  id?: Maybe<ID_Input>;
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonCreateManyWithoutParentsInput>;
+  marriage?: Maybe<MarriageCreateManyWithoutPersonInput>;
+  user?: Maybe<UserCreateOneWithoutPersonInput>;
+}
+
+export interface PersonCreateWithoutMarriageInput {
+  id?: Maybe<ID_Input>;
+  firstname?: Maybe<String>;
+  middlename?: Maybe<String>;
+  lastname?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  deathday?: Maybe<DateTimeInput>;
+  sex?: Maybe<Sex>;
+  parents?: Maybe<PersonCreateManyWithoutParentsInput>;
+  children?: Maybe<PersonCreateManyWithoutChildrenInput>;
+  user?: Maybe<UserCreateOneWithoutPersonInput>;
+}
 
 export interface NodeNode {
   id: ID_Output;
+}
+
+export interface UserPreviousValues {
+  id: ID_Output;
+  name: String;
+  email: String;
+  password: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface AggregateMarriage {
+  count: Int;
+}
+
+export interface AggregateMarriagePromise
+  extends Promise<AggregateMarriage>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMarriageSubscription
+  extends Promise<AsyncIterator<AggregateMarriage>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PersonSubscriptionPayload {
+  mutation: MutationType;
+  node: Person;
+  updatedFields: String[];
+  previousValues: PersonPreviousValues;
+}
+
+export interface PersonSubscriptionPayloadPromise
+  extends Promise<PersonSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PersonPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PersonPreviousValuesPromise>() => T;
+}
+
+export interface PersonSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PersonSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PersonSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PersonPreviousValuesSubscription>() => T;
+}
+
+export interface MarriageEdge {
+  node: Marriage;
+  cursor: String;
+}
+
+export interface MarriageEdgePromise
+  extends Promise<MarriageEdge>,
+    Fragmentable {
+  node: <T = MarriagePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface MarriageEdgeSubscription
+  extends Promise<AsyncIterator<MarriageEdge>>,
+    Fragmentable {
+  node: <T = MarriageSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateUser {
@@ -203,23 +1271,268 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface UserPreviousValues {
+export interface MarriageConnection {
+  pageInfo: PageInfo;
+  edges: MarriageEdge[];
+}
+
+export interface MarriageConnectionPromise
+  extends Promise<MarriageConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<MarriageEdge>>() => T;
+  aggregate: <T = AggregateMarriagePromise>() => T;
+}
+
+export interface MarriageConnectionSubscription
+  extends Promise<AsyncIterator<MarriageConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MarriageEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMarriageSubscription>() => T;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface User {
   id: ID_Output;
   name: String;
+  email: String;
+  password: String;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
 }
 
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
-    Fragmentable {
+export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  person: <T = PersonPromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
 }
 
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  person: <T = PersonSubscription>() => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  person: <T = PersonPromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface AggregatePerson {
+  count: Int;
+}
+
+export interface AggregatePersonPromise
+  extends Promise<AggregatePerson>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePersonSubscription
+  extends Promise<AsyncIterator<AggregatePerson>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PersonConnection {
+  pageInfo: PageInfo;
+  edges: PersonEdge[];
+}
+
+export interface PersonConnectionPromise
+  extends Promise<PersonConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PersonEdge>>() => T;
+  aggregate: <T = AggregatePersonPromise>() => T;
+}
+
+export interface PersonConnectionSubscription
+  extends Promise<AsyncIterator<PersonConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<PersonEdgeSubscription>>>() => T;
+  aggregate: <T = AggregatePersonSubscription>() => T;
+}
+
+export interface MarriagePreviousValues {
+  id: ID_Output;
+  isOfficial?: Boolean;
+  marriedAt?: DateTimeOutput;
+  divorcedAt?: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface MarriagePreviousValuesPromise
+  extends Promise<MarriagePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  isOfficial: () => Promise<Boolean>;
+  marriedAt: () => Promise<DateTimeOutput>;
+  divorcedAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MarriagePreviousValuesSubscription
+  extends Promise<AsyncIterator<MarriagePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  isOfficial: () => Promise<AsyncIterator<Boolean>>;
+  marriedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  divorcedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface MarriageSubscriptionPayload {
+  mutation: MutationType;
+  node: Marriage;
+  updatedFields: String[];
+  previousValues: MarriagePreviousValues;
+}
+
+export interface MarriageSubscriptionPayloadPromise
+  extends Promise<MarriageSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = MarriagePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = MarriagePreviousValuesPromise>() => T;
+}
+
+export interface MarriageSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MarriageSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = MarriageSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = MarriagePreviousValuesSubscription>() => T;
+}
+
+export interface Marriage {
+  id: ID_Output;
+  isOfficial?: Boolean;
+  marriedAt?: DateTimeOutput;
+  divorcedAt?: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface MarriagePromise extends Promise<Marriage>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  isOfficial: () => Promise<Boolean>;
+  marriedAt: () => Promise<DateTimeOutput>;
+  divorcedAt: () => Promise<DateTimeOutput>;
+  person: <T = PersonPromise>() => T;
+  marriedTo: <T = PersonPromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MarriageSubscription
+  extends Promise<AsyncIterator<Marriage>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  isOfficial: () => Promise<AsyncIterator<Boolean>>;
+  marriedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  divorcedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  person: <T = PersonSubscription>() => T;
+  marriedTo: <T = PersonSubscription>() => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface MarriageNullablePromise
+  extends Promise<Marriage | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  isOfficial: () => Promise<Boolean>;
+  marriedAt: () => Promise<DateTimeOutput>;
+  divorcedAt: () => Promise<DateTimeOutput>;
+  person: <T = PersonPromise>() => T;
+  marriedTo: <T = PersonPromise>() => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PersonPreviousValues {
+  id: ID_Output;
+  firstname?: String;
+  middlename?: String;
+  lastname?: String;
+  birthday?: DateTimeOutput;
+  deathday?: DateTimeOutput;
+  sex?: Sex;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface PersonPreviousValuesPromise
+  extends Promise<PersonPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  firstname: () => Promise<String>;
+  middlename: () => Promise<String>;
+  lastname: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
+  deathday: () => Promise<DateTimeOutput>;
+  sex: () => Promise<Sex>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PersonPreviousValuesSubscription
+  extends Promise<AsyncIterator<PersonPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  firstname: () => Promise<AsyncIterator<String>>;
+  middlename: () => Promise<AsyncIterator<String>>;
+  lastname: () => Promise<AsyncIterator<String>>;
+  birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
+  deathday: () => Promise<AsyncIterator<DateTimeOutput>>;
+  sex: () => Promise<AsyncIterator<Sex>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface UserEdge {
@@ -237,6 +1550,159 @@ export interface UserEdgeSubscription
     Fragmentable {
   node: <T = UserSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface PersonEdge {
+  node: Person;
+  cursor: String;
+}
+
+export interface PersonEdgePromise extends Promise<PersonEdge>, Fragmentable {
+  node: <T = PersonPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PersonEdgeSubscription
+  extends Promise<AsyncIterator<PersonEdge>>,
+    Fragmentable {
+  node: <T = PersonSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Person {
+  id: ID_Output;
+  firstname?: String;
+  middlename?: String;
+  lastname?: String;
+  birthday?: DateTimeOutput;
+  deathday?: DateTimeOutput;
+  sex?: Sex;
+  updatedAt: DateTimeOutput;
+  createdAt: DateTimeOutput;
+}
+
+export interface PersonPromise extends Promise<Person>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  firstname: () => Promise<String>;
+  middlename: () => Promise<String>;
+  lastname: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
+  deathday: () => Promise<DateTimeOutput>;
+  sex: () => Promise<Sex>;
+  parents: <T = FragmentableArray<Person>>(args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  children: <T = FragmentableArray<Person>>(args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  marriage: <T = FragmentableArray<Marriage>>(args?: {
+    where?: MarriageWhereInput;
+    orderBy?: MarriageOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  user: <T = UserPromise>() => T;
+}
+
+export interface PersonSubscription
+  extends Promise<AsyncIterator<Person>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  firstname: () => Promise<AsyncIterator<String>>;
+  middlename: () => Promise<AsyncIterator<String>>;
+  lastname: () => Promise<AsyncIterator<String>>;
+  birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
+  deathday: () => Promise<AsyncIterator<DateTimeOutput>>;
+  sex: () => Promise<AsyncIterator<Sex>>;
+  parents: <T = Promise<AsyncIterator<PersonSubscription>>>(args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  children: <T = Promise<AsyncIterator<PersonSubscription>>>(args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  marriage: <T = Promise<AsyncIterator<MarriageSubscription>>>(args?: {
+    where?: MarriageWhereInput;
+    orderBy?: MarriageOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  user: <T = UserSubscription>() => T;
+}
+
+export interface PersonNullablePromise
+  extends Promise<Person | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  firstname: () => Promise<String>;
+  middlename: () => Promise<String>;
+  lastname: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
+  deathday: () => Promise<DateTimeOutput>;
+  sex: () => Promise<Sex>;
+  parents: <T = FragmentableArray<Person>>(args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  children: <T = FragmentableArray<Person>>(args?: {
+    where?: PersonWhereInput;
+    orderBy?: PersonOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  marriage: <T = FragmentableArray<Marriage>>(args?: {
+    where?: MarriageWhereInput;
+    orderBy?: MarriageOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  updatedAt: () => Promise<DateTimeOutput>;
+  createdAt: () => Promise<DateTimeOutput>;
+  user: <T = UserPromise>() => T;
 }
 
 export interface UserSubscriptionPayload {
@@ -264,80 +1730,10 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface User {
-  id: ID_Output;
-  name: String;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
-
-export type Long = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -345,15 +1741,27 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 export type ID_Input = string | number;
 export type ID_Output = string;
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
+export type Long = string;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
+/*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
 
 /**
  * Model Metadata
@@ -362,6 +1770,18 @@ export type Boolean = boolean;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Sex",
+    embedded: false
+  },
+  {
+    name: "Person",
+    embedded: false
+  },
+  {
+    name: "Marriage",
     embedded: false
   }
 ];

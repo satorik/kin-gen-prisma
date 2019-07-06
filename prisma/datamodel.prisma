@@ -1,4 +1,42 @@
 type User {
   id: ID! @id
   name: String!
+  email: String! @unique
+  password: String!
+  person: Person @relation(name: "PersonByUser", onDelete: CASCADE, link: INLINE)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
+}
+
+type Person {
+  id: ID! @id
+  firstname: String
+  middlename: String
+  lastname: String
+  birthday: DateTime
+  deathday: DateTime
+  sex: Sex
+  parents: [Person] @relation(name: "ParentsOfPerson", onDelete: SET_NULL)
+  children: [Person] @relation(name: "ChildrenOfPerson", onDelete: CASCADE)
+  marriage: [Marriage] @relation(name: "MarriageOfPerson", onDelete: CASCADE)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
+  user: User @relation(name: "PersonByUser")
+}
+
+type Marriage {
+  id: ID! @id
+  isOfficial: Boolean
+  marriedAt: DateTime
+  divorcedAt: DateTime
+  person: Person @relation(name: "MarriageOfPerson")
+  marriedTo: Person @relation(name: "MarriedToPerson", onDelete: SET_NULL)
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
 }
